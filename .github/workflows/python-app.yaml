@@ -38,7 +38,7 @@ jobs:
     - name: Static code analysis
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        poetry run ruff $(git ls-files '*.py')
+        poetry run ruff check $(git ls-files '*.py')
 
     - name: Test with pytest
       run: |
