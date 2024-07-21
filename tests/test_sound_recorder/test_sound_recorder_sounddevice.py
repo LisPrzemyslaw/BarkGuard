@@ -1,4 +1,3 @@
-import pytest
 from bark_guard.sound_recorder.impl.sound_recorder_sounddevice import SoundRecorderSoundDevice
 
 
@@ -10,7 +9,6 @@ class Test:
         assert sound_recorder.frequency == 44100
         assert sound_recorder.recorded_audio is None
 
-    # @pytest.mark.skip(reason="Recording is not possible in github actions.")
     def test_record(self):
         """This test verifies that the record function works correctly."""
         sound_recorder = SoundRecorderSoundDevice()
