@@ -29,6 +29,9 @@ jobs:
         pip install poetry==1.7.1
         poetry config virtualenvs.in-project true
 
+    - name: Install PortAudio
+      run: sudo apt-get install -y portaudio19-dev
+
     - name: Install dependencies
       run: |
         poetry check
