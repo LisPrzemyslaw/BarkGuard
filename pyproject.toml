@@ -11,6 +11,8 @@ numpy = "*"
 sounddevice = "*"
 wavio = "*"
 fastapi = "*"
+uvicorn = "*"
+opencv-python-headless = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
