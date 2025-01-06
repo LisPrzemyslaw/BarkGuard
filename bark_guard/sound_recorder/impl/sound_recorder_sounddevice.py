@@ -1,31 +1,42 @@
+from typing import TYPE_CHECKING
+
 from bark_guard.sound_recorder.sound_recorder_interface import SoundRecorderInterface
 import sounddevice
 
+if TYPE_CHECKING:
+    from collections import deque
+
 
 class SoundRecorderSoundDevice(SoundRecorderInterface):
-    def __init__(self, frequency: int = 44100):
-        super().__init__(frequency)
+    def __init__(self, audio_container: deque, frequency: int = 44100):
+        """
+        :param audio_container: container for recorded audio
+        :param frequency: frequency of the audio recording
+        """
+        super().__init__(audio_container, frequency)
 
-    def record(self, duration: float = 0) -> None:
-        if duration == 0:
+    def _record_audio_in_thread(self, period_duration: float = 0) -> None:
+        if period_duration == 0:
             raise NotImplementedError("Recording without duration is not implemented yet.")
-        self.recorded_audio = sounddevice.rec(
-            int(self.frequency * duration),
-            samplerate=self.frequency,
-            channels=1,
-            dtype="int16",
-        )
-        sounddevice.wait()
+        while not self._is_stop:
+            recorded_audio = sounddevice.rec(
+                int(self.frequency * period_duration),
+                samplerate=self.frequency,
+                channels=1,
+                dtype="int16",
+            )
+            sounddevice.wait()
+            self.audio_container.append(recorded_audio)
 
     def stop(self) -> None:
+        super().stop()
         sounddevice.stop()
 
-    def get_audio(self) -> bytes:
-        return self.recorded_audio
+    def save_audio(self, file_name: str, recorded_audio) -> None:
+        """
+        This function should save the recorded audio to a file.
 
-    def play_audio(self, audio: bytes) -> None:
-        raise NotImplementedError("Playing audio is not implemented yet.")
-
-    def delete_audio(self) -> None:
-        self.recorded_audio = None
-        # TODO delete also from disc if exist
+        :param file_name: name of the file without extension
+        :param recorded_audio: audio to save, usually with barking sounds
+        """
+        raise NotImplementedError("Saving audio is not implemented yet.")

@@ -1,57 +1,56 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
-import wavio
+import threading
+
+if TYPE_CHECKING:
+    from collections import deque
 
 
 class SoundRecorderInterface(ABC):
-    def __init__(self, frequency: int = 44100):
-        self.frequency = frequency
-        self.recorded_audio = None
-
-    @abstractmethod
-    def record(self, duration: float = 0) -> None:
+    def __init__(self, audio_container: deque, frequency: int = 44100):
         """
-        This function should record audio for a given duration.
+        This class should be used as an interface for all sound recorders.
 
-        :param duration: duration of the recording in seconds. If duration is 0, the recording should be continuous.
+        :param audio_container: container for recorded audio
+        :param frequency: frequency of the audio recording
         """
-        pass
+        self.audio_container: deque = audio_container
+        self.frequency: int = frequency
 
-    @abstractmethod
+        self.thread: threading.Thread | None = None
+        self._is_stop = False
+
+    def record(self, period_duration: float = 0) -> None:
+        """
+        This function should record audio continuously in a given periods of times.
+
+        :param period_duration: duration of the recording in seconds. If duration is 0, the recording should be continuous.
+        """
+        self.thread = threading.Thread(target=self._record_audio_in_thread, args=(period_duration,), daemon=True)
+        self.thread.start()
+
     def stop(self) -> None:
-        """This function should stop the recording."""
-        pass
+        """This function should stop the recording thread by changing the flag."""
+        self._is_stop = True
+        self.thread.join()
 
     @abstractmethod
-    def get_audio(self) -> bytes:
+    def _record_audio_in_thread(self, period_duration: float = 0) -> None:
         """
-        This function should return the recorded audio.
+        This function should record audio in a separate thread.
 
-        :return: recorded audio
-        """
-        pass
-
-    @abstractmethod
-    def play_audio(self, audio: bytes) -> None:
-        """
-        This function should play the audio.
-        :param audio:
-        :return:
+        :param period_duration: duration of the recording in seconds. If duration is 0, the recording should be continuous.
         """
         pass
 
     @abstractmethod
-    def delete_audio(self) -> None:
-        """This function should delete the recorded audio."""
-        pass
-
-    def get_audio_duration(self) -> float:
-        """This function should return the duration of the recorded audio in seconds."""
-        return len(self.recorded_audio) / self.frequency
-
-    def save_audio(self, file_name: str) -> None:
+    def save_audio(self, file_name: str, recorded_audio) -> None:
         """
         This function should save the recorded audio to a file.
 
         :param file_name: name of the file without extension
+        :param recorded_audio: audio to save, usually with barking sounds
         """
-        wavio.write(f"{file_name}.wav", self.recorded_audio, self.frequency, sampwidth=2)
+        pass
