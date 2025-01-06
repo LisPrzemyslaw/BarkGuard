@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from bark_guard.sound_recorder.sound_recorder_interface import SoundRecorderInterface

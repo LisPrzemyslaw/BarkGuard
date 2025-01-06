@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import numpy as np
 
 
 class BarkRecognitionInterface(ABC):
@@ -6,7 +7,7 @@ class BarkRecognitionInterface(ABC):
         pass
 
     @abstractmethod
-    def recognize_bark(self, audio: bytes) -> bool:
+    def recognize_bark(self, audio: np.ndarray) -> bool:
         """
         This function should recognize if the audio contains a dog bark.
 
