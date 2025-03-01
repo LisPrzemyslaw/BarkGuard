@@ -11,6 +11,9 @@ numpy = "*"
 sounddevice = "*"
 wavio = "*"
 fastapi = "*"
+matplotlib = "*"
+librosa = "0.10.2"
+llvmlite = "0.43.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
