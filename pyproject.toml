@@ -1,28 +1,17 @@
-[tool.poetry]
+[project]
 name = "bark-guard"
 version = "0.1.0"
 description = "The project will recognize barking and makes action"
 authors = ["Lis Przemyslaw <przemyslaw_lis@outlook.com>"]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.11"
-numpy = "*"
-sounddevice = "*"
-wavio = "*"
-fastapi = "*"
-uvicorn = "*"
-sqlalchemy = "*"
-PyJWT = "*"
-matplotlib = "*"
-librosa = "0.10.2"
-llvmlite = "0.43.0"
-
-[tool.poetry.dev-dependencies]
-pytest = "^6.2"
-ruff = "*"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = "<4.0,>=3.11"
+dependencies = [
+    "fastapi>=0.115.11",
+    "matplotlib>=3.10.1",
+    "numpy>=2.2.3",
+    "pyjwt>=2.10.1",
+    "sounddevice>=0.5.1",
+    "sqlalchemy>=2.0.39",
+    "uvicorn>=0.34.0",
+    "wavio>=0.0.9",
+]
