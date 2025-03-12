@@ -1,6 +1,5 @@
 import os
 
-from bark_guard.sound_recorder.impl.sound_recorder_sounddevice import SoundRecorderSoundDevice
 from collections import deque
 from matplotlib import pyplot as plt
 import pprint

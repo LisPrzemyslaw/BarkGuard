@@ -1,5 +1,5 @@
 from collections import deque
-from bark_guard.sound_recorder.sound_recorder_factory import SoundRecorderFactory, SoundRecorderType
+from bark_guard_client.sound_recorder.sound_recorder_factory import SoundRecorderFactory, SoundRecorderType
 
 FREQUENCY = 44100
 

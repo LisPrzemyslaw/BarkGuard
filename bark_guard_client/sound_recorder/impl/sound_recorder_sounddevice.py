@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from bark_guard.sound_recorder.sound_recorder_interface import SoundRecorderInterface
+from bark_guard_client.sound_recorder.sound_recorder_interface import SoundRecorderInterface
 import sounddevice
 
 if TYPE_CHECKING:

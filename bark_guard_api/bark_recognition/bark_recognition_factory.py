@@ -1,4 +1,4 @@
-from bark_guard.bark_recognition.bark_recognition_interface import BarkRecognitionInterface
+from bark_guard_api.bark_recognition.bark_recognition_interface import BarkRecognitionInterface
 from enum import Enum
 
 

@@ -1,0 +1,1 @@
+# This package will store the java app for android which will send and pase data to the API.

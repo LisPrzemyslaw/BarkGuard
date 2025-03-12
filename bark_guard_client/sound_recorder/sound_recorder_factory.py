@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from collections import deque
 
-from bark_guard.sound_recorder.sound_recorder_interface import SoundRecorderInterface
-from bark_guard.sound_recorder.impl.sound_recorder_sounddevice import SoundRecorderSoundDevice
+from bark_guard_client.sound_recorder.sound_recorder_interface import SoundRecorderInterface
+from bark_guard_client.sound_recorder.impl.sound_recorder_sounddevice import SoundRecorderSoundDevice
 from enum import Enum, auto
 
 
