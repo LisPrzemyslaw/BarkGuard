@@ -1,7 +1,21 @@
+from __future__ import annotations
 import hashlib
 
-from sqlalchemy import Column, Integer, String
-from bark_guard_api.database.database import _Base
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+from bark_guard_api.database import _Base
+
+
+class Subscription(_Base):
+    __tablename__ = "subscription"
+
+    subscription_id = Column("subscription_id", Integer, primary_key=True, autoincrement=True)
+    plan = Column("plan", String)
+    user_id = Column("user_id", Integer, ForeignKey("user.user_id"), unique=True)
+    user = relationship("User", back_populates="subscription")
+
+    def __init__(self, plan: str):
+        self.plan = plan
 
 
 class User(_Base):
@@ -10,10 +24,12 @@ class User(_Base):
     user_id = Column("user_id", Integer, primary_key=True, autoincrement=True)
     email = Column("email", String)
     password = Column("password", String)
+    subscription = relationship(Subscription, back_populates="user", uselist=False)
 
-    def __init__(self, email: str, password: str) -> None:
+    def __init__(self, email: str, password: str, subscription: Subscription) -> None:
         self.email = email
         self.password = self.__encode_password(password)
+        self.subscription_id = subscription
 
     @staticmethod
     def __encode_password(password: str) -> str:
