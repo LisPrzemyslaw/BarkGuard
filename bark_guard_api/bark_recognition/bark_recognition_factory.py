@@ -9,8 +9,9 @@ class BarkRecognitionType(Enum):
 class BarkRecognitionFactory:
     _AVAILABLE_RECOGNIZERS = {}
 
-    def create_bark_recognizer(self, recognizer_type: BarkRecognitionType) -> BarkRecognitionInterface:
+    @staticmethod
+    def create_bark_recognizer(recognizer_type: BarkRecognitionType) -> BarkRecognitionInterface:
         try:
-            return self._AVAILABLE_RECOGNIZERS[recognizer_type]()
+            return BarkRecognitionFactory._AVAILABLE_RECOGNIZERS[recognizer_type]()
         except KeyError:
             raise KeyError(f"There is no recognizer: {recognizer_type}")
