@@ -11,7 +11,7 @@ class Subscription(_Base):
 
     subscription_id = Column("subscription_id", Integer, primary_key=True, autoincrement=True)
     plan = Column("plan", String)
-    user_id = Column("user_id", Integer, ForeignKey("user.user_id"), unique=True)
+    user_id = Column("user_id", Integer, ForeignKey("user.user_id"), unique=True, nullable=False)
     user = relationship("User", back_populates="subscription")
 
     def __init__(self, plan: str):
@@ -24,12 +24,19 @@ class User(_Base):
     user_id = Column("user_id", Integer, primary_key=True, autoincrement=True)
     email = Column("email", String)
     password = Column("password", String)
-    subscription = relationship(Subscription, back_populates="user", uselist=False)
+    subscription = relationship("Subscription", back_populates="user", uselist=False, cascade="all, delete-orphan")
 
-    def __init__(self, email: str, password: str, subscription: Subscription) -> None:
+    def __init__(self, email: str, password: str, subscription_plan: str = "FREE") -> None:
+        """
+        This function is used to create User object and assing new subscription to it.
+
+        :param email: user email
+        :param password: user password
+        :param subscription_plan: subscription plan
+        """
         self.email = email
         self.password = self.__encode_password(password)
-        self.subscription_id = subscription
+        self.subscription = Subscription(subscription_plan)
 
     @staticmethod
     def __encode_password(password: str) -> str:

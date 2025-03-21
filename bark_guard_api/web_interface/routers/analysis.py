@@ -1,12 +1,13 @@
 import asyncio
-
+import datetime
+from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 
 from bark_guard_api.web_interface.models.models import AudioRequest
 from bark_guard_api.web_interface.dependencies import verify_jwt
 from bark_guard_api.database.session import db_session
-from bark_guard_api.database.tables.tables import User, Subscription
+from bark_guard_api.database.tables.tables import Subscription
 from bark_guard_api.web_interface.bark_guard_session import streaming_sessions, Stream
 from bark_guard_api.bark_recognition.bark_recognition_factory import BarkRecognitionFactory
 
@@ -29,9 +30,17 @@ async def start_session(user_id: int = Depends(verify_jwt)) -> JSONResponse:
     """
     streaming_sessions[user_id] = Stream()
     stream: Stream = streaming_sessions[user_id]
-    await asyncio.sleep(1)
     subscription_type = db_session.query(Subscription).filter(Subscription.user_id == user_id).first().plan
     bark_recognizer = BarkRecognitionFactory.create_bark_recognizer(subscription_type)
+
+    while datetime.datetime.now() < stream.start_time + timedelta(seconds=30):  # Wait for the first sound
+        if len(stream.records) != 0:
+            break
+        await asyncio.sleep(1)
+    else:
+        await end_session()
+        raise HTTPException(status_code=status.HTTP_408_REQUEST_TIMEOUT, detail="No sound was uploaded. Session ended.")
+
     while True:
         if stream.is_session_end:
             return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Session ended."})
